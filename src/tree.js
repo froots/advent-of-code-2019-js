@@ -4,6 +4,9 @@ class Tree {
   }
 
   addNode(id) {
+    if (this.getNode(id) !== null) {
+      return false;
+    }
     let node = new Node(id);
     this.nodes = [...this.nodes, node];
     return node;
@@ -18,6 +21,11 @@ class Tree {
     }
   }
 
+  createRelationship(parent, child) {
+    parent.children.push(child);
+    child.parent = parent;
+  }
+
   get count() {
     return this.nodes.length;
   }
@@ -26,6 +34,8 @@ class Tree {
 class Node {
   constructor(id) {
     this.id = id;
+    this.children = [];
+    this.parent = null;
   }
 }
 
