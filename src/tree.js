@@ -4,11 +4,13 @@ class Tree {
   }
 
   addNode(id) {
-    if (this.getNode(id) !== null) {
-      return false;
+    let node = this.getNode(id);
+
+    if (node === null) {
+      node = new Node(id);
+      this.nodes = [...this.nodes, node];
     }
-    let node = new Node(id);
-    this.nodes = [...this.nodes, node];
+
     return node;
   }
 
@@ -29,6 +31,10 @@ class Tree {
   get count() {
     return this.nodes.length;
   }
+
+  get totalAncestorCount() {
+    return this.nodes.reduce((sum, node) => node.ancestorCount + sum, 0);
+  }
 }
 
 class Node {
@@ -36,6 +42,13 @@ class Node {
     this.id = id;
     this.children = [];
     this.parent = null;
+  }
+
+  get ancestorCount() {
+    if (!this.parent) {
+      return 0;
+    }
+    return 1 + this.parent.ancestorCount;
   }
 }
 
