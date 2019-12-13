@@ -16,3 +16,11 @@ test('Intcode#load program', t => {
   t.equals(computer.pointer, 0);
   t.deepEqual(computer.program, program);
 });
+
+test('Intcode run simple adder', t => {
+  t.plan(1);
+  const adder = [1, 2, 3, 2, 99];
+  const computer = new Intcode();
+  computer.load(adder);
+  t.deepEqual(computer.run(), [1, 2, 5, 2, 99]);
+});
