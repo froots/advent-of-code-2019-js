@@ -17,10 +17,18 @@ test('Intcode#load program', t => {
   t.deepEqual(computer.program, program);
 });
 
-test('Intcode run simple adder', t => {
+test('Intcode adder', t => {
   t.plan(1);
   const adder = [1, 2, 3, 2, 99];
   const computer = new Intcode();
   computer.load(adder);
   t.deepEqual(computer.run(), [1, 2, 5, 2, 99]);
+});
+
+test('Intcode multiplier', t => {
+  t.plan(1);
+  const multiplier = [2, 2, 4, 0, 99];
+  const computer = new Intcode();
+  computer.load(multiplier);
+  t.deepEqual(computer.run(), [396, 2, 4, 0, 99]);
 });

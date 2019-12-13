@@ -1,5 +1,6 @@
 const OPS = {
   ADD: 1,
+  PRODUCT: 2,
   HALT: 99
 };
 
@@ -16,6 +17,7 @@ class Intcode {
   }
 
   run() {
+    debugger;
     for (let result of this) {
       this.history.push([...result]);
     }
@@ -23,16 +25,25 @@ class Intcode {
   }
 
   *[Symbol.iterator]() {
+    let p1, p2, p3;
     switch (this.getMemOffset(0)) {
       case OPS.ADD:
-        let p1 = this.getMemOffset(1);
-        let p2 = this.getMemOffset(2);
-        let p3 = this.getMemOffset(3);
-        this.setMem(p3, p1 + p2);
+        [p1, p2, p3] = this.getParams(3);
+        this.setMem(p3, this.program[p1] + this.program[p2]);
         this.pointer += 4;
         yield this.program;
+        break;
+
+      case OPS.PRODUCT:
+        [p1, p2, p3] = this.getParams(3);
+        this.setMem(p3, this.program[p1] * this.program[p2]);
+        this.pointer += 4;
+        yield this.program;
+        break;
+
       case OPS.HALT:
-        return false;
+        return this.program;
+
       default:
         throw new Error('Unknown operation!');
     }
@@ -40,7 +51,7 @@ class Intcode {
 
   getMem(pointer) {
     const val = this.program && this.program[pointer];
-    if (val) {
+    if (val !== null) {
       return val;
     } else {
       throw new Error('Null pointer exception!');
@@ -49,6 +60,14 @@ class Intcode {
 
   getMemOffset(pointerOffset) {
     return this.getMem(this.pointer + pointerOffset);
+  }
+
+  getParams(count) {
+    let params = [];
+    for (let i = 0; i < count; i++) {
+      params.push(this.getMemOffset(i + 1));
+    }
+    return params;
   }
 
   setMem(pointer, val) {

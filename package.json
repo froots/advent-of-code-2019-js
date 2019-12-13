@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "tape tests/**/*.js | tap-dot",
+    "test": "tape tests/**/*.js | tap-spec",
     "start": "node ./bin/run.js"
   },
   "keywords": [],
@@ -12,6 +12,7 @@
   "license": "ISC",
   "devDependencies": {
     "tap-dot": "^2.0.0",
+    "tap-spec": "^5.0.0",
     "tape": "^4.11.0"
   },
   "dependencies": {}
