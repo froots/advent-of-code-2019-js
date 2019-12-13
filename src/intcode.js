@@ -1,6 +1,12 @@
 class Intcode {
-  constructor(program) {
+  constructor() {
+    this.program = null;
+    this.pointer = null;
+  }
+
+  load(program) {
     this.program = program;
+    this.pointer = 0;
   }
 
   run() {
