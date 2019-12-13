@@ -1,9 +1,11 @@
+const day2 = require('./day2.js');
 const day6 = require('./day6.js');
 
 const [_, __, day] = process.argv;
 
 const days = new Map();
 
+days.set(2, day2);
 days.set(6, day6);
 
 if (day) {
