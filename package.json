@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "tape tests/**/*.js | tap-spec"
+    "test": "tape tests/**/*.js | tap-spec",
+    "start": "node ./bin/run.js"
   },
   "keywords": [],
   "author": "",
@@ -12,5 +13,6 @@
   "devDependencies": {
     "tap-spec": "^5.0.0",
     "tape": "^4.11.0"
-  }
+  },
+  "dependencies": {}
 }
