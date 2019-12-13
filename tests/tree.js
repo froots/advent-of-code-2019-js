@@ -46,3 +46,44 @@ test('Tree: count ancestors', t => {
   tree.createRelationship(A, E); // E => A => COM = 2
   t.equal(tree.totalAncestorCount, 8);
 });
+
+test('Tree: common node', t => {
+  t.plan(3);
+  const tree = new Tree();
+  const COM = tree.addNode('COM');
+  const A = tree.addNode('A');
+  const B = tree.addNode('B');
+  const C = tree.addNode('C');
+  const D = tree.addNode('D');
+  const E = tree.addNode('E');
+  tree.createRelationship(COM, A);
+  tree.createRelationship(A, B);
+  tree.createRelationship(A, C);
+  tree.createRelationship(C, D);
+  tree.createRelationship(B, E);
+
+  t.equal(tree.commonNode(C, B), A);
+  t.equal(tree.commonNode(E, B), B);
+  t.equal(tree.commonNode(D, B), A);
+});
+
+test('Tree: jumps between', t => {
+  t.plan(4);
+  const tree = new Tree();
+  const COM = tree.addNode('COM');
+  const A = tree.addNode('A');
+  const B = tree.addNode('B');
+  const C = tree.addNode('C');
+  const D = tree.addNode('D');
+  const E = tree.addNode('E');
+  tree.createRelationship(COM, A);
+  tree.createRelationship(A, B);
+  tree.createRelationship(A, C);
+  tree.createRelationship(C, D);
+  tree.createRelationship(B, E);
+
+  t.equal(tree.jumpsBetween(A, COM), 0); // A is already orbiting COM, i.e. there is a direct connection
+  t.equal(tree.jumpsBetween(B, COM), 1);
+  t.equal(tree.jumpsBetween(D, A), 1);
+  t.equal(tree.jumpsBetween(E, COM), 2);
+});

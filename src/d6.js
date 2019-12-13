@@ -2,7 +2,9 @@ const Tree = require('./tree.js');
 
 function run(data) {
   let pairs = parse(data);
-  console.log(part1(pairs));
+  let tree = createTreeFromData(pairs);
+  console.log('Day 6:1: ', part1(tree));
+  console.log('Day 6:2: ', part2(tree));
 }
 
 function parse(data) {
@@ -12,14 +14,30 @@ function parse(data) {
     .map(line => line.trim().split(')'));
 }
 
-function part1(pairs) {
+function createTreeFromData(pairs) {
   let tree = new Tree();
   for ([left, right] of pairs) {
     let parent = tree.addNode(left);
     let child = tree.addNode(right);
     tree.createRelationship(parent, child);
   }
+  return tree;
+}
+
+function part1(tree) {
   return tree.totalAncestorCount;
 }
 
-module.exports = { run, parse };
+function part2(tree) {
+  let you = tree.getNode('YOU');
+  let santa = tree.getNode('SAN');
+  let commonNode = tree.commonNode(you, santa);
+  if (commonNode.length === 0) {
+    return 'No common ancestor';
+  }
+  return (
+    tree.jumpsBetween(you, commonNode) + tree.jumpsBetween(santa, commonNode)
+  );
+}
+
+module.exports = { run, parse, createTreeFromData, part1, part2 };
