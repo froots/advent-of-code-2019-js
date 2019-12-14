@@ -9,10 +9,13 @@ class Intcode {
     this.memory = null;
     this.instructionPointer = null;
     this.history = [];
+    this.final = [];
   }
 
   load(program) {
     this.memory = [...program];
+    this.history = [];
+    this.final = [];
     this.instructionPointer = 0;
   }
 
@@ -41,6 +44,7 @@ class Intcode {
           return this.memory;
 
         case OPS.HALT:
+          this.final = [...this.memory];
           return false;
 
         default:
