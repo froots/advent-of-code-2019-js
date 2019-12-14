@@ -49,3 +49,12 @@ test('Intcode input', t => {
   computer.load(program);
   t.deepEqual(computer.run(), [3, 4, 99, 1, 80]);
 });
+
+test('Intcode output', t => {
+  t.plan(2);
+  const program = [4, 4, 99, 3, 5, 6];
+  const computer = new Intcode();
+  computer.load(program);
+  t.deepEqual(computer.run(), [4, 4, 99, 3, 5, 6]);
+  t.deepEqual(computer.output, [5]);
+});

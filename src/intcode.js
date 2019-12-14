@@ -1,7 +1,8 @@
-const OPS = {
+const OPERATION = {
   ADD: 1,
   PRODUCT: 2,
   INPUT: 3,
+  OUTPUT: 4,
   HALT: 99
 };
 
@@ -12,6 +13,7 @@ class Intcode {
     this.history = [];
     this.final = [];
     this.input = null;
+    this.output = [];
   }
 
   load(program) {
@@ -19,6 +21,7 @@ class Intcode {
     this.history = [];
     this.final = [];
     this.instructionPointer = 0;
+    this.ouput = [];
   }
 
   run() {
@@ -31,19 +34,19 @@ class Intcode {
 
     let iterator = () => {
       switch (this.readOffset(0)) {
-        case OPS.ADD:
+        case OPERATION.ADD:
           [p1, p2, p3] = this.getParams(3);
           this.write(p3, this.read(p1) + this.read(p2));
           this.moveInstructionPointer(4);
           return this.memory;
 
-        case OPS.PRODUCT:
+        case OPERATION.PRODUCT:
           [p1, p2, p3] = this.getParams(3);
           this.write(p3, this.read(p1) * this.read(p2));
           this.moveInstructionPointer(4);
           return this.memory;
 
-        case OPS.INPUT:
+        case OPERATION.INPUT:
           if (this.input === null) {
             throw new Error(
               'Input instruction encountered but no input value provided.'
@@ -54,7 +57,13 @@ class Intcode {
           this.moveInstructionPointer(2);
           return this.memory;
 
-        case OPS.HALT:
+        case OPERATION.OUTPUT:
+          [p1] = this.getParams(1);
+          this.output = [...this.output, this.read(p1)];
+          this.moveInstructionPointer(2);
+          return this.memory;
+
+        case OPERATION.HALT:
           this.final = [...this.memory];
           return false;
 
