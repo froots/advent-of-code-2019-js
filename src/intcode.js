@@ -17,7 +17,6 @@ class Intcode {
   }
 
   run() {
-    debugger;
     for (let result of this) {
       this.history.push([...result]);
     }
@@ -57,8 +56,8 @@ class Intcode {
     }
   }
 
-  getMem(pointer) {
-    const val = this.memory && this.memory[pointer];
+  getMem(address) {
+    const val = this.memory && this.memory[address];
     if (val !== null) {
       return val;
     } else {
@@ -78,9 +77,9 @@ class Intcode {
     return params;
   }
 
-  setMem(pointer, val) {
+  setMem(address, val) {
     let memory = [...this.memory];
-    memory[pointer] = val;
+    memory[address] = val;
     this.memory = memory;
   }
 }
