@@ -14,7 +14,7 @@ test('Intcode#load program', t => {
   const computer = new Intcode();
   computer.load(program);
   t.equals(computer.pointer, 0);
-  t.deepEqual(computer.program, program);
+  t.deepEqual(computer.memory, program);
 });
 
 test('Intcode adder', t => {

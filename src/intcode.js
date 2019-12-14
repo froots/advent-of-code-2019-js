@@ -6,13 +6,13 @@ const OPS = {
 
 class Intcode {
   constructor() {
-    this.program = null;
+    this.memory = null;
     this.pointer = null;
     this.history = [];
   }
 
   load(program) {
-    this.program = [...program];
+    this.memory = [...program];
     this.pointer = 0;
   }
 
@@ -21,7 +21,7 @@ class Intcode {
     for (let result of this) {
       this.history.push([...result]);
     }
-    return this.program;
+    return this.memory;
   }
 
   *[Symbol.iterator]() {
@@ -31,15 +31,15 @@ class Intcode {
       switch (this.getMemOffset(0)) {
         case OPS.ADD:
           [p1, p2, p3] = this.getParams(3);
-          this.setMem(p3, this.program[p1] + this.program[p2]);
+          this.setMem(p3, this.getMem(p1) + this.getMem(p2));
           this.pointer += 4;
-          return this.program;
+          return this.memory;
 
         case OPS.PRODUCT:
           [p1, p2, p3] = this.getParams(3);
-          this.setMem(p3, this.program[p1] * this.program[p2]);
+          this.setMem(p3, this.getMem(p1) * this.getMem(p2));
           this.pointer += 4;
-          return this.program;
+          return this.memory;
 
         case OPS.HALT:
           return false;
@@ -58,7 +58,7 @@ class Intcode {
   }
 
   getMem(pointer) {
-    const val = this.program && this.program[pointer];
+    const val = this.memory && this.memory[pointer];
     if (val !== null) {
       return val;
     } else {
@@ -79,9 +79,9 @@ class Intcode {
   }
 
   setMem(pointer, val) {
-    let program = [...this.program];
-    program[pointer] = val;
-    this.program = program;
+    let memory = [...this.memory];
+    memory[pointer] = val;
+    this.memory = memory;
   }
 }
 
