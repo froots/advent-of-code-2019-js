@@ -17,10 +17,10 @@ function part1(program, p1, p2) {
   const computer = new Intcode();
   computer.load(program);
   if (p1) {
-    computer.setMem(1, p1);
+    computer.write(1, p1);
   }
   if (p2) {
-    computer.setMem(2, p2);
+    computer.write(2, p2);
   }
   computer.run();
   return computer.memory[0];
@@ -33,8 +33,8 @@ function part2(program, target) {
   loop_outer: for (let i = 0; i < len; i++) {
     for (let j = 0; j < len; j++) {
       computer.load(program);
-      computer.setMem(1, i);
-      computer.setMem(2, j);
+      computer.write(1, i);
+      computer.write(2, j);
       try {
         computer.run();
       } catch (e) {

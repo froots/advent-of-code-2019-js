@@ -20,9 +20,7 @@ class Intcode {
   }
 
   run() {
-    for (let result of this) {
-      this.history.push([...result]);
-    }
+    this.history = [...this];
     return this.memory;
   }
 
@@ -30,16 +28,16 @@ class Intcode {
     let p1, p2, p3;
 
     let iterator = () => {
-      switch (this.getMemOffset(0)) {
+      switch (this.readOffset(0)) {
         case OPS.ADD:
           [p1, p2, p3] = this.getParams(3);
-          this.setMem(p3, this.getMem(p1) + this.getMem(p2));
+          this.write(p3, this.read(p1) + this.read(p2));
           this.moveInstructionPointer(4);
           return this.memory;
 
         case OPS.PRODUCT:
           [p1, p2, p3] = this.getParams(3);
-          this.setMem(p3, this.getMem(p1) * this.getMem(p2));
+          this.write(p3, this.read(p1) * this.read(p2));
           this.moveInstructionPointer(4);
           return this.memory;
 
@@ -64,7 +62,7 @@ class Intcode {
     this.instructionPointer += offset;
   }
 
-  getMem(address) {
+  read(address) {
     const val = this.memory && this.memory[address];
     if (val !== null) {
       return val;
@@ -73,19 +71,19 @@ class Intcode {
     }
   }
 
-  getMemOffset(offset) {
-    return this.getMem(this.instructionPointer + offset);
+  readOffset(offset) {
+    return this.read(this.instructionPointer + offset);
   }
 
   getParams(count) {
     let params = [];
     for (let i = 0; i < count; i++) {
-      params.push(this.getMemOffset(i + 1));
+      params.push(this.readOffset(i + 1));
     }
     return params;
   }
 
-  setMem(address, val) {
+  write(address, val) {
     let memory = [...this.memory];
     memory[address] = val;
     this.memory = memory;
