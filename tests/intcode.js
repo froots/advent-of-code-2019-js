@@ -32,3 +32,11 @@ test('Intcode multiplier', t => {
   computer.load(multiplier);
   t.deepEqual(computer.run(), [396, 2, 4, 0, 99]);
 });
+
+test('Intcode add and multiply', t => {
+  t.plan(1);
+  const program = [1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50];
+  const computer = new Intcode();
+  computer.load(program);
+  t.deepEqual(computer.run(), [3500, 9, 10, 70, 2, 3, 11, 0, 99, 30, 40, 50]);
+});

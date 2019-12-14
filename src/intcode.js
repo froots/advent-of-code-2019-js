@@ -26,26 +26,34 @@ class Intcode {
 
   *[Symbol.iterator]() {
     let p1, p2, p3;
-    switch (this.getMemOffset(0)) {
-      case OPS.ADD:
-        [p1, p2, p3] = this.getParams(3);
-        this.setMem(p3, this.program[p1] + this.program[p2]);
-        this.pointer += 4;
-        yield this.program;
-        break;
 
-      case OPS.PRODUCT:
-        [p1, p2, p3] = this.getParams(3);
-        this.setMem(p3, this.program[p1] * this.program[p2]);
-        this.pointer += 4;
-        yield this.program;
-        break;
+    let iterator = () => {
+      switch (this.getMemOffset(0)) {
+        case OPS.ADD:
+          [p1, p2, p3] = this.getParams(3);
+          this.setMem(p3, this.program[p1] + this.program[p2]);
+          this.pointer += 4;
+          return this.program;
 
-      case OPS.HALT:
-        return this.program;
+        case OPS.PRODUCT:
+          [p1, p2, p3] = this.getParams(3);
+          this.setMem(p3, this.program[p1] * this.program[p2]);
+          this.pointer += 4;
+          return this.program;
 
-      default:
-        throw new Error('Unknown operation!');
+        case OPS.HALT:
+          return false;
+
+        default:
+          throw new Error('Unknown operation!');
+      }
+    };
+
+    let result = iterator();
+
+    while (result) {
+      yield result;
+      result = iterator();
     }
   }
 
