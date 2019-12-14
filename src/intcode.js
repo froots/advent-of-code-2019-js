@@ -7,13 +7,13 @@ const OPS = {
 class Intcode {
   constructor() {
     this.memory = null;
-    this.pointer = null;
+    this.instructionPointer = null;
     this.history = [];
   }
 
   load(program) {
     this.memory = [...program];
-    this.pointer = 0;
+    this.instructionPointer = 0;
   }
 
   run() {
@@ -31,13 +31,13 @@ class Intcode {
         case OPS.ADD:
           [p1, p2, p3] = this.getParams(3);
           this.setMem(p3, this.getMem(p1) + this.getMem(p2));
-          this.pointer += 4;
+          this.moveInstructionPointer(4);
           return this.memory;
 
         case OPS.PRODUCT:
           [p1, p2, p3] = this.getParams(3);
           this.setMem(p3, this.getMem(p1) * this.getMem(p2));
-          this.pointer += 4;
+          this.moveInstructionPointer(4);
           return this.memory;
 
         case OPS.HALT:
@@ -56,6 +56,10 @@ class Intcode {
     }
   }
 
+  moveInstructionPointer(offset) {
+    this.instructionPointer += offset;
+  }
+
   getMem(address) {
     const val = this.memory && this.memory[address];
     if (val !== null) {
@@ -65,8 +69,8 @@ class Intcode {
     }
   }
 
-  getMemOffset(pointerOffset) {
-    return this.getMem(this.pointer + pointerOffset);
+  getMemOffset(offset) {
+    return this.getMem(this.instructionPointer + offset);
   }
 
   getParams(count) {

@@ -13,7 +13,7 @@ test('Intcode#load program', t => {
   const program = [1, 2, 3, 2, 99];
   const computer = new Intcode();
   computer.load(program);
-  t.equals(computer.pointer, 0);
+  t.equals(computer.instructionPointer, 0);
   t.deepEqual(computer.memory, program);
 });
 
