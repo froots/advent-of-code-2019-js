@@ -40,3 +40,12 @@ test('Intcode add and multiply', t => {
   computer.load(program);
   t.deepEqual(computer.run(), [3500, 9, 10, 70, 2, 3, 11, 0, 99, 30, 40, 50]);
 });
+
+test('Intcode input', t => {
+  t.plan(1);
+  const program = [3, 4, 99, 1, 1];
+  const computer = new Intcode();
+  computer.input = 80;
+  computer.load(program);
+  t.deepEqual(computer.run(), [3, 4, 99, 1, 80]);
+});

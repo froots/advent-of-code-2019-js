@@ -1,6 +1,7 @@
 const OPS = {
   ADD: 1,
   PRODUCT: 2,
+  INPUT: 3,
   HALT: 99
 };
 
@@ -10,6 +11,7 @@ class Intcode {
     this.instructionPointer = null;
     this.history = [];
     this.final = [];
+    this.input = null;
   }
 
   load(program) {
@@ -39,6 +41,17 @@ class Intcode {
           [p1, p2, p3] = this.getParams(3);
           this.write(p3, this.read(p1) * this.read(p2));
           this.moveInstructionPointer(4);
+          return this.memory;
+
+        case OPS.INPUT:
+          if (this.input === null) {
+            throw new Error(
+              'Input instruction encountered but no input value provided.'
+            );
+          }
+          [p1] = this.getParams(1);
+          this.write(p1, this.input);
+          this.moveInstructionPointer(2);
           return this.memory;
 
         case OPS.HALT:
