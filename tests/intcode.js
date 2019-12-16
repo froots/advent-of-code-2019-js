@@ -58,3 +58,11 @@ test('Intcode output', t => {
   t.deepEqual(computer.run(), [4, 4, 99, 3, 5, 6]);
   t.deepEqual(computer.output, [5]);
 });
+
+test('Intcode parameter modes', t => {
+  t.plan(1);
+  const program = [1101, 38, 22, 3, 99];
+  const computer = new Intcode();
+  computer.load(program);
+  t.deepEqual(computer.run(), [1101, 38, 22, 60, 99]);
+});

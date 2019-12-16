@@ -29,20 +29,34 @@ class Intcode {
     return this.memory;
   }
 
+  parseInstruction() {
+    let instruction = this.readOffset(0);
+    const m3 = Boolean(Math.floor(instruction / 10000));
+    instruction = instruction % 10000;
+    const m2 = Boolean(Math.floor(instruction / 1000));
+    instruction = instruction % 1000;
+    const m1 = Boolean(Math.floor(instruction / 100));
+    const opcode = instruction % 100;
+    return [opcode, m1, m2, m3];
+  }
+
   *[Symbol.iterator]() {
-    let p1, p2, p3;
+    let p1, p2, p3, res;
 
     let iterator = () => {
-      switch (this.readOffset(0)) {
+      let [opcode, m1, m2, m3] = this.parseInstruction();
+      switch (opcode) {
         case OPERATION.ADD:
           [p1, p2, p3] = this.getParams(3);
-          this.write(p3, this.read(p1) + this.read(p2));
+          res = (m1 ? p1 : this.read(p1)) + (m2 ? p2 : this.read(p2));
+          this.write(p3, res);
           this.moveInstructionPointer(4);
           return this.memory;
 
         case OPERATION.PRODUCT:
           [p1, p2, p3] = this.getParams(3);
-          this.write(p3, this.read(p1) * this.read(p2));
+          res = (m1 ? p1 : this.read(p1)) * (m2 ? p2 : this.read(p2));
+          this.write(p3, res);
           this.moveInstructionPointer(4);
           return this.memory;
 
@@ -59,7 +73,8 @@ class Intcode {
 
         case OPERATION.OUTPUT:
           [p1] = this.getParams(1);
-          this.output = [...this.output, this.read(p1)];
+          res = m1 ? p1 : this.read(p1);
+          this.output = [...this.output, res];
           this.moveInstructionPointer(2);
           return this.memory;
 
