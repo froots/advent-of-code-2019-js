@@ -3,6 +3,7 @@ const OPERATION = {
   PRODUCT: 2,
   INPUT: 3,
   OUTPUT: 4,
+  JUMP_IF_TRUE: 5,
   HALT: 99
 };
 
@@ -76,6 +77,15 @@ class Intcode {
           res = m1 ? p1 : this.read(p1);
           this.output = [...this.output, res];
           this.moveInstructionPointer(2);
+          return this.memory;
+
+        case OPERATION.JUMP_IF_TRUE:
+          [p1, p2] = this.getParams(2);
+          if (p1 > 0) {
+            this.instructionPointer = p2;
+          } else {
+            this.moveInstructionPointer(3);
+          }
           return this.memory;
 
         case OPERATION.HALT:

@@ -66,3 +66,12 @@ test('Intcode parameter modes', t => {
   computer.load(program);
   t.deepEqual(computer.run(), [1101, 38, 22, 60, 99]);
 });
+
+test('Intcode jump-if-true', t => {
+  t.plan(1);
+  const program = [5, 1, 7, 1, 0, 2, 0, 5, 0, 14, 2, 0, 2, 1, 99];
+  const expected = [5, 35, 7, 1, 0, 2, 0, 5, 0, 14, 2, 0, 2, 1, 99];
+  const computer = new Intcode();
+  computer.load(program);
+  t.deepEqual(computer.run(), expected);
+});
