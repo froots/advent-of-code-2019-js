@@ -5,6 +5,7 @@ const OPERATION = {
   OUTPUT: 4,
   JUMP_IF_TRUE: 5,
   JUMP_IF_FALSE: 6,
+  LESS_THAN: 7,
   HALT: 99
 };
 
@@ -94,6 +95,12 @@ class Intcode {
           } else {
             this.instructionPointer = p2;
           }
+          return this.memory;
+
+        case OPERATION.LESS_THAN:
+          [p1, p2, p3] = this.getParams([m1, m2, true]);
+          this.write(p3, p1 < p2 ? 1 : 0);
+          this.moveInstructionPointer(4);
           return this.memory;
 
         case OPERATION.HALT:

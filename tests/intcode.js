@@ -107,6 +107,14 @@ test('Intcode jumps immediate mode with input = 1', t => {
   t.equal(computer.output[0], 1);
 });
 
+test('Intcode less than position mode', t => {
+  t.plan(1);
+  const program = [7, 9, 10, 11, 7, 10, 9, 12, 99, 4, 3, -1, -1];
+  const computer = new Intcode();
+  computer.load(program);
+  t.deepEqual(computer.run(), [7, 9, 10, 11, 7, 10, 9, 12, 99, 4, 3, 0, 1]);
+});
+
 // test('Intcode long example when input < 8', t => {
 //   t.plan(1);
 //   const program = [
