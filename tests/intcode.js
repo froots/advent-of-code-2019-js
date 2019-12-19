@@ -2,6 +2,56 @@ const Intcode = require('../src/intcode.js');
 
 const test = require('tape');
 
+const example = [
+  3,
+  21,
+  1008,
+  21,
+  8,
+  20,
+  1005,
+  20,
+  22,
+  107,
+  8,
+  21,
+  20,
+  1006,
+  20,
+  31,
+  1106,
+  0,
+  36,
+  98,
+  0,
+  0,
+  1002,
+  21,
+  125,
+  20,
+  4,
+  20,
+  1105,
+  1,
+  46,
+  104,
+  999,
+  1105,
+  1,
+  46,
+  1101,
+  1000,
+  1,
+  20,
+  4,
+  20,
+  1105,
+  1,
+  46,
+  98,
+  99
+];
+
 test('Intcode#new without program throws exception if run', t => {
   t.plan(1);
   const computer = new Intcode();
@@ -142,60 +192,29 @@ test('Intcode equals immediate mode', t => {
   t.deepEqual(computer.run(), expected);
 });
 
-// test('Intcode long example when input < 8', t => {
-//   t.plan(1);
-//   const program = [
-//     3,
-//     21,
-//     1008,
-//     21,
-//     8,
-//     20,
-//     1005,
-//     20,
-//     22,
-//     107,
-//     8,
-//     21,
-//     20,
-//     1006,
-//     20,
-//     31,
-//     1106,
-//     0,
-//     36,
-//     98,
-//     0,
-//     0,
-//     1002,
-//     21,
-//     125,
-//     20,
-//     4,
-//     20,
-//     1105,
-//     1,
-//     46,
-//     104,
-//     999,
-//     1105,
-//     1,
-//     46,
-//     1101,
-//     1000,
-//     1,
-//     20,
-//     4,
-//     20,
-//     1105,
-//     1,
-//     46,
-//     98,
-//     99
-//   ];
-//   const computer = new Intcode();
-//   computer.load(program);
-//   computer.input = 7;
-//   computer.run();
-//   t.equal(computer.output[0], 999);
-// });
+test('Intcode long example when input < 8', t => {
+  t.plan(1);
+  const computer = new Intcode();
+  computer.load(example);
+  computer.input = 7;
+  computer.run();
+  t.equal(computer.output[0], 999);
+});
+
+test('Intcode long example when input = 8', t => {
+  t.plan(1);
+  const computer = new Intcode();
+  computer.load(example);
+  computer.input = 8;
+  computer.run();
+  t.equal(computer.output[0], 1000);
+});
+
+test('Intcode long example when input > 8', t => {
+  t.plan(1);
+  const computer = new Intcode();
+  computer.load(example);
+  computer.input = 9;
+  computer.run();
+  t.equal(computer.output[0], 1001);
+});
