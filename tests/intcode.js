@@ -100,6 +100,16 @@ test('Intcode input', t => {
   t.deepEqual(computer.run(), [3, 4, 99, 1, 80]);
 });
 
+test('Intcode 2 input values', t => {
+  t.plan(1);
+  const program = [3, 5, 3, 6, 99, -1, -1];
+  const expected = [3, 5, 3, 6, 99, 10, 20];
+  const computer = new Intcode();
+  computer.input = [10, 20];
+  computer.load(program);
+  t.deepEqual(computer.run(), expected);
+});
+
 test('Intcode output', t => {
   t.plan(2);
   const program = [4, 4, 99, 3, 5, 6];
