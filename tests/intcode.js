@@ -124,6 +124,24 @@ test('Intcode less than immediate mode', t => {
   t.deepEqual(computer.run(), expected);
 });
 
+test('Intcode equals position mode', t => {
+  t.plan(1);
+  const program = [8, 9, 10, 12, 8, 9, 11, 13, 99, 4, 3, 4, -1, -1];
+  const expected = [8, 9, 10, 12, 8, 9, 11, 13, 99, 4, 3, 4, 0, 1];
+  const computer = new Intcode();
+  computer.load(program);
+  t.deepEqual(computer.run(), expected);
+});
+
+test('Intcode equals immediate mode', t => {
+  t.plan(1);
+  const program = [1108, 100, 100, 12, 1108, 9, 11, 13, 99, 4, 3, 4, -1, -1];
+  const expected = [1108, 100, 100, 12, 1108, 9, 11, 13, 99, 4, 3, 4, 1, 0];
+  const computer = new Intcode();
+  computer.load(program);
+  t.deepEqual(computer.run(), expected);
+});
+
 // test('Intcode long example when input < 8', t => {
 //   t.plan(1);
 //   const program = [
