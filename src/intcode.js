@@ -16,7 +16,7 @@ class Intcode {
     this.instructionPointer = null;
     this.history = [];
     this.final = [];
-    this.input = null;
+    this.input = [];
     this.output = [];
   }
 
@@ -65,13 +65,13 @@ class Intcode {
           return this.memory;
 
         case OPERATION.INPUT:
-          if (this.input === null) {
+          if (this.input.length < 1) {
             throw new Error(
               'Input instruction encountered but no input value provided.'
             );
           }
           [p1] = this.getParams([true]);
-          this.write(p1, this.input);
+          this.write(p1, this.input.shift());
           this.moveInstructionPointer(2);
           return this.memory;
 

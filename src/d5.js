@@ -16,7 +16,7 @@ function parse(data) {
 function part1(program, input) {
   const computer = new Intcode();
   computer.load(program);
-  computer.input = input;
+  computer.input = [input];
   computer.run();
   return computer.output;
 }
@@ -24,7 +24,7 @@ function part1(program, input) {
 function part2(program, input) {
   const computer = new Intcode();
   computer.load(program);
-  computer.input = input;
+  computer.input = [input];
   computer.run();
   return computer.output;
 }

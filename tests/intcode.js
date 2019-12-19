@@ -95,7 +95,7 @@ test('Intcode input', t => {
   t.plan(1);
   const program = [3, 4, 99, 1, 1];
   const computer = new Intcode();
-  computer.input = 80;
+  computer.input = [80];
   computer.load(program);
   t.deepEqual(computer.run(), [3, 4, 99, 1, 80]);
 });
@@ -122,7 +122,7 @@ test('Intcode jumps position mode with input = 0', t => {
   const program = [3, 12, 6, 12, 15, 1, 13, 14, 13, 4, 13, 99, -1, 0, 1, 9];
   const computer = new Intcode();
   computer.load(program);
-  computer.input = 0;
+  computer.input = [0];
   computer.run();
   t.equal(computer.output[0], 0);
 });
@@ -132,7 +132,7 @@ test('Intcode jumps position mode with input = 1', t => {
   const program = [3, 12, 6, 12, 15, 1, 13, 14, 13, 4, 13, 99, -1, 0, 1, 9];
   const computer = new Intcode();
   computer.load(program);
-  computer.input = 1;
+  computer.input = [1];
   computer.run();
   t.equal(computer.output[0], 1);
 });
@@ -142,7 +142,7 @@ test('Intcode jumps immediate mode with input = 0', t => {
   const program = [3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1];
   const computer = new Intcode();
   computer.load(program);
-  computer.input = 0;
+  computer.input = [0];
   computer.run();
   t.equal(computer.output[0], 0);
 });
@@ -152,7 +152,7 @@ test('Intcode jumps immediate mode with input = 1', t => {
   const program = [3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1];
   const computer = new Intcode();
   computer.load(program);
-  computer.input = 1;
+  computer.input = [1];
   computer.run();
   t.equal(computer.output[0], 1);
 });
@@ -196,7 +196,7 @@ test('Intcode long example when input < 8', t => {
   t.plan(1);
   const computer = new Intcode();
   computer.load(example);
-  computer.input = 7;
+  computer.input = [7];
   computer.run();
   t.equal(computer.output[0], 999);
 });
@@ -205,7 +205,7 @@ test('Intcode long example when input = 8', t => {
   t.plan(1);
   const computer = new Intcode();
   computer.load(example);
-  computer.input = 8;
+  computer.input = [8];
   computer.run();
   t.equal(computer.output[0], 1000);
 });
@@ -214,7 +214,7 @@ test('Intcode long example when input > 8', t => {
   t.plan(1);
   const computer = new Intcode();
   computer.load(example);
-  computer.input = 9;
+  computer.input = [9];
   computer.run();
   t.equal(computer.output[0], 1001);
 });
