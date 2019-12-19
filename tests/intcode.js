@@ -67,11 +67,100 @@ test('Intcode parameter modes', t => {
   t.deepEqual(computer.run(), [1101, 38, 22, 60, 99]);
 });
 
-test('Intcode jump-if-true', t => {
+test('Intcode jumps position mode with input = 0', t => {
   t.plan(1);
-  const program = [5, 1, 7, 1, 0, 2, 0, 5, 0, 14, 2, 0, 2, 1, 99];
-  const expected = [5, 35, 7, 1, 0, 2, 0, 5, 0, 14, 2, 0, 2, 1, 99];
+  const program = [3, 12, 6, 12, 15, 1, 13, 14, 13, 4, 13, 99, -1, 0, 1, 9];
   const computer = new Intcode();
   computer.load(program);
-  t.deepEqual(computer.run(), expected);
+  computer.input = 0;
+  computer.run();
+  t.equal(computer.output[0], 0);
 });
+
+test('Intcode jumps position mode with input = 1', t => {
+  t.plan(1);
+  const program = [3, 12, 6, 12, 15, 1, 13, 14, 13, 4, 13, 99, -1, 0, 1, 9];
+  const computer = new Intcode();
+  computer.load(program);
+  computer.input = 1;
+  computer.run();
+  t.equal(computer.output[0], 1);
+});
+
+test('Intcode jumps immediate mode with input = 0', t => {
+  t.plan(1);
+  const program = [3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1];
+  const computer = new Intcode();
+  computer.load(program);
+  computer.input = 0;
+  computer.run();
+  t.equal(computer.output[0], 0);
+});
+
+test('Intcode jumps immediate mode with input = 1', t => {
+  t.plan(1);
+  const program = [3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1];
+  const computer = new Intcode();
+  computer.load(program);
+  computer.input = 1;
+  computer.run();
+  t.equal(computer.output[0], 1);
+});
+
+// test('Intcode long example when input < 8', t => {
+//   t.plan(1);
+//   const program = [
+//     3,
+//     21,
+//     1008,
+//     21,
+//     8,
+//     20,
+//     1005,
+//     20,
+//     22,
+//     107,
+//     8,
+//     21,
+//     20,
+//     1006,
+//     20,
+//     31,
+//     1106,
+//     0,
+//     36,
+//     98,
+//     0,
+//     0,
+//     1002,
+//     21,
+//     125,
+//     20,
+//     4,
+//     20,
+//     1105,
+//     1,
+//     46,
+//     104,
+//     999,
+//     1105,
+//     1,
+//     46,
+//     1101,
+//     1000,
+//     1,
+//     20,
+//     4,
+//     20,
+//     1105,
+//     1,
+//     46,
+//     98,
+//     99
+//   ];
+//   const computer = new Intcode();
+//   computer.load(program);
+//   computer.input = 7;
+//   computer.run();
+//   t.equal(computer.output[0], 999);
+// });

@@ -4,6 +4,7 @@ const OPERATION = {
   INPUT: 3,
   OUTPUT: 4,
   JUMP_IF_TRUE: 5,
+  JUMP_IF_FALSE: 6,
   HALT: 99
 };
 
@@ -22,7 +23,7 @@ class Intcode {
     this.history = [];
     this.final = [];
     this.instructionPointer = 0;
-    this.ouput = [];
+    this.output = [];
   }
 
   run() {
@@ -48,15 +49,15 @@ class Intcode {
       let [opcode, m1, m2, m3] = this.parseInstruction();
       switch (opcode) {
         case OPERATION.ADD:
-          [p1, p2, p3] = this.getParams(3);
-          res = (m1 ? p1 : this.read(p1)) + (m2 ? p2 : this.read(p2));
+          [p1, p2, p3] = this.getParams([m1, m2, true]);
+          res = p1 + p2;
           this.write(p3, res);
           this.moveInstructionPointer(4);
           return this.memory;
 
         case OPERATION.PRODUCT:
-          [p1, p2, p3] = this.getParams(3);
-          res = (m1 ? p1 : this.read(p1)) * (m2 ? p2 : this.read(p2));
+          [p1, p2, p3] = this.getParams([m1, m2, true]);
+          res = p1 * p2;
           this.write(p3, res);
           this.moveInstructionPointer(4);
           return this.memory;
@@ -67,24 +68,31 @@ class Intcode {
               'Input instruction encountered but no input value provided.'
             );
           }
-          [p1] = this.getParams(1);
+          [p1] = this.getParams([true]);
           this.write(p1, this.input);
           this.moveInstructionPointer(2);
           return this.memory;
 
         case OPERATION.OUTPUT:
-          [p1] = this.getParams(1);
-          res = m1 ? p1 : this.read(p1);
-          this.output = [...this.output, res];
+          this.output = [...this.output, ...this.getParams([m1])];
           this.moveInstructionPointer(2);
           return this.memory;
 
         case OPERATION.JUMP_IF_TRUE:
-          [p1, p2] = this.getParams(2);
+          [p1, p2] = this.getParams([m1, m2]);
           if (p1 > 0) {
             this.instructionPointer = p2;
           } else {
             this.moveInstructionPointer(3);
+          }
+          return this.memory;
+
+        case OPERATION.JUMP_IF_FALSE:
+          [p1, p2] = this.getParams([m1, m2]);
+          if (p1 > 0) {
+            this.moveInstructionPointer(3);
+          } else {
+            this.instructionPointer = p2;
           }
           return this.memory;
 
@@ -93,7 +101,9 @@ class Intcode {
           return false;
 
         default:
-          throw new Error('Unknown operation!');
+          throw new Error(
+            'Unknown operation: ' + opcode + ', ' + m1 + ', ' + m2 + ', ' + m3
+          );
       }
     };
 
@@ -122,12 +132,11 @@ class Intcode {
     return this.read(this.instructionPointer + offset);
   }
 
-  getParams(count) {
-    let params = [];
-    for (let i = 0; i < count; i++) {
-      params.push(this.readOffset(i + 1));
-    }
-    return params;
+  getParams(modes) {
+    return modes.map((mode, i) => {
+      let val = this.readOffset(i + 1);
+      return mode ? val : this.read(val);
+    });
   }
 
   write(address, val) {
