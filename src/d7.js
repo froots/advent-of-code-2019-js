@@ -1,4 +1,4 @@
-const Intcode = require('./intcode.js');
+const IntcodeArray = require('./intcode-array.js');
 const permute = require('./permute.js');
 
 function run(data) {
@@ -17,25 +17,11 @@ function part1(program, input = 0) {
   let phaseSequences = permute([0, 1, 2, 3, 4]);
 
   let results = phaseSequences.map(sequence => {
-    let amps = sequence.map(phaseSetting => {
-      let amp = new Intcode();
-      amp.load(program);
-      amp.input = [phaseSetting];
-      return amp;
-    });
+    let amps = new IntcodeArray();
+    sequence.forEach(phaseSetting => amps.add(program, [phaseSetting]));
+    amps.run();
 
-    let nextInput = input;
-
-    amps.forEach(amp => {
-      amp.input.push(nextInput);
-      amp.run();
-      if (!amp.output.length) {
-        throw new Error('Amp did not create an output');
-      }
-      nextInput = amp.output.reverse()[0];
-    });
-
-    return nextInput;
+    return amps.get(0).lastOutput();
   });
 
   return Math.max(...results);
