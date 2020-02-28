@@ -18,9 +18,22 @@ test('IntcodeArray #add with program and input', t => {
 
 test('IntcodeArray #run with one computer', t => {
   t.plan(1);
+  // Program that outputs 5 + input
   let program = [3, 9, 1, 9, 10, 11, 4, 11, 99, -1, 5, -1];
   let arr = new IntcodeArray();
   arr.add(program, [3]);
   arr.run();
   t.deepEqual(arr.get(0).computer.output, [8]);
+});
+
+test('IntcodeArray #run with closed ended sequence of two', t => {
+  t.plan(2);
+  // Program that outputs 5 + input
+  let program = [3, 9, 1, 9, 10, 11, 4, 11, 99, -1, 5, -1];
+  let arr = new IntcodeArray();
+  arr.add(program, [3]);
+  arr.add(program);
+  arr.run();
+  t.deepEqual(arr.get(0).computer.output, [8]);
+  t.deepEqual(arr.get(1).computer.output, [13]);
 });
